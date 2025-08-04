@@ -1,0 +1,131 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+
+int i,n;
+
+class Books
+{
+    int price, sp;
+    char *tt, *aut, *pub;
+
+public:
+    Books()
+    {
+        tt = new char[100];
+        aut = new char[100];
+        pub = new char[100];
+
+        price = 100;
+        sp = 20;
+        strcpy(tt, "oop");
+        strcpy(aut, "Ebal");
+        strcpy(pub, "TATA");
+    }
+
+    void accept()
+    {
+        cout << "\n Enter the title, author, pub, price, sp: ";
+        cin >> tt >> aut >> pub >> price >> sp;
+    }
+
+    void display();
+    void search();
+
+    ~Books()
+    {
+        delete[] tt;
+        delete[] aut;
+        delete[] pub;
+    }
+};
+
+Books b[10]; // Array of Books objects
+
+void Books::search()
+{
+    int cost, f = 0, f1 = 0, cp;
+    char *t, *a;
+    t = new char[100];
+    a = new char[100];
+
+    cout << "\n Enter the title and author which you want to search: ";
+    cin >> t >> a;
+
+    for(i = 0; i < n; i++)
+    {
+        if(strcmp(t, b[i].tt) == 0 && strcmp(a, b[i].aut) == 0)
+        {
+            f = 1;
+            cout << "Book is found";
+            b[i].display();
+
+            cout << "\nEnter the number of copies: ";
+            cin >> cp;
+            if(cp <= b[i].sp)
+            {
+                f1 = 1;
+                cost = b[i].price * cp;
+                cout << "\n Total cost = " << cost;
+                break;
+            }
+        }
+    }
+
+    if(f == 1 && f1 == 0)
+    {
+        cout << "\n Book is available but the number of copies is not available";
+    }
+
+    if(f == 0)
+        cout << "\n Book is not found";
+
+    delete[] t;
+    delete[] a;
+}
+
+void Books::display()
+{
+    cout << "\n" << tt << "\t" << aut << "\t" << pub << "\t" << price << "\t" << sp;
+}
+
+int main()
+{
+    int ch;
+    cout << "\n Enter the Total number of Books: ";
+    cin >> n;
+
+    do
+    {
+        cout << "\n Main Menu";
+        cout << "\n 1. Accept\n2. Display\n3. Search\n0. Exit";
+        cout << "\n Enter your choice: ";
+        cin >> ch;
+
+        switch(ch)
+        {
+            case 1:
+                for(i = 0; i < n; i++)
+                {
+                    b[i].accept();
+                }
+                break;
+
+            case 2:
+                cout << "\n Title\tAuthor\tPublisher\tPrice\tStock";
+                for(i = 0; i < n; i++)
+                {
+                    b[i].display();
+                }
+                break;
+
+            case 3:
+                b[0].search();  // Call search on the first object, which searches all objects
+                break;
+        }
+
+    } while(ch != 0);
+
+    cout << "\n Program is terminating, destructors are called only once per object.";
+    return 0;
+}
